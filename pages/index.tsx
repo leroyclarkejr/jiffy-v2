@@ -8,15 +8,19 @@ import Header from "../components/Header";
 import { UserHint } from "../components/UserHint";
 import { Gif } from "../components/Gif";
 
-import { useSearchGiphy } from "../hooks/useSearchGiphy";
+const randomChoice = (arr: []) => {
+  const randIndex = Math.floor(Math.random() * arr.length);
+  return arr[randIndex];
+};
 
 const Home: NextPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [gifs, setGifs] = useState<array>([]);
+  const [gifs, setGifs] = useState([]);
   const [hintText, setHintText] = useState<string>("");
-  const [hasResults, seHasResults] = useState<boolean>(false);
-
+  const [hasResults, setHasResults] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [validSearchPhrase, setValidSearchPhrase] = useState(false);
 
   let inputRef = useRef(null);
 
@@ -42,24 +46,27 @@ const Home: NextPage = () => {
       setHasResults(true);
       setLoading(false);
     } catch (error) {
-      setHintText(error);
+      setHintText(searchTerm);
       setLoading(false);
     }
   };
 
-  const handleChange = (event) => {
-    const { value } = event.target;
+  const handleChange = (e: { target: { value: string } }) => {
+    const { value } = e.target;
     setSearchTerm(value);
 
     if (value.length > 2) {
       setHintText(`Hit enter to search ${value}`);
+      setValidSearchPhrase(true);
+    } else {
+      setHintText(null);
+      setValidSearchPhrase(false);
     }
   };
 
-  function handleKeyPress(event) {
-    const { value } = event.target;
-    if (value.length > 2 && event.key === "Enter") {
-      giphySearch(value);
+  function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (validSearchPhrase && e.key === "Enter") {
+      giphySearch(searchTerm);
     }
   }
 
@@ -72,11 +79,10 @@ const Home: NextPage = () => {
   return (
     <main className="page">
       <Header clearSearch={clearSearch} hasResults={hasResults} />
-
       <div className="search grid">
         {gifs.map((gif) => (
           // eslint-disable-next-line react/jsx-key
-          <Gif {...gifs} />
+          <Gif images={[...gifs]} />
         ))}
         <input
           className="input grid-item"
@@ -88,10 +94,10 @@ const Home: NextPage = () => {
           ref={(input) => (inputRef = input)}
           aria-label="Search for Gifs"
         />
-        <button>Search</button>
+        <button aria-label="Submit search term">Search</button>
       </div>
 
-      {/* <UserHint loading={loading} hintText={hintText} /> */}
+      <UserHint loading={loading} hintText={hintText} />
     </main>
   );
 };

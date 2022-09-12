@@ -12,7 +12,7 @@ export const Header = ({ clearSearch, hasResults }: HeaderProps) => {
     <header className="header">
       <div className="mx-auto text-center">
         {hasResults ? (
-          <button onClick={clearSearch} ariaLabel="Clear Search">
+          <button onClick={clearSearch} aria-label="Clear Search">
             <Image src={clearButton} alt="Clear Search" />
           </button>
         ) : (
