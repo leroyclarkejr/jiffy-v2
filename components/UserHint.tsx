@@ -1,11 +1,17 @@
 import Image from "next/image";
 import react from "react";
+import loaderIcon from "../public/images/loader.svg";
 
-export const UserHint = (hintText: string) => {
+export interface UserHintProps {
+  hintText: string;
+  loading: boolean;
+}
+
+export const UserHint = ({ hintText, loading }: UserHintProps) => {
   return (
     <div className="user-hint">
       {loading ? (
-        <Image src={loaderIcon} alt="Loading icon" />
+        <Image className="block mx-auto" src={loaderIcon} alt="Loading icon" />
       ) : (
         <h2 aria-label="User Hint">{hintText}</h2>
       )}

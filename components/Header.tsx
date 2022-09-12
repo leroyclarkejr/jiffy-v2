@@ -1,17 +1,24 @@
 import Image from "next/image";
 import react, { useState } from "React";
-import clearButton from "/public/images/close-icon";
+import clearButton from "../public/images/close-icon.svg";
 
-export const Header = ({ clearSearch, hasResults }) => {
+export interface HeaderProps {
+  clearSearch: () => void;
+  hasResults: boolean;
+}
+
+export const Header = ({ clearSearch, hasResults }: HeaderProps) => {
   return (
-    <header>
-      {hasResults ? (
-        <button onClick={clearSearch} ariaLabel="Clear Search">
-          <Image src={clearButton} alt="Clear Search" />
-        </button>
-      ) : (
-        <h1 className="title">Giphy API Search</h1>
-      )}
+    <header className="header">
+      <div className="mx-auto text-center">
+        {hasResults ? (
+          <button onClick={clearSearch} ariaLabel="Clear Search">
+            <Image src={clearButton} alt="Clear Search" />
+          </button>
+        ) : (
+          <h1 className="title">Giphy API Search</h1>
+        )}
+      </div>
     </header>
   );
 };
