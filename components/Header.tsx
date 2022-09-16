@@ -1,6 +1,5 @@
 import Image from "next/image";
-import react, { useState } from "React";
-import clearButton from "../public/images/close-icon.svg";
+import clearButton from "/public/images/close-icon.svg";
 
 export interface HeaderProps {
   clearSearch: () => void;

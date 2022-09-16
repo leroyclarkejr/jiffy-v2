@@ -6,25 +6,31 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import { UserHint } from "../components/UserHint";
-import { Gif } from "../components/Gif";
+import { Gif, GifProps } from "../components/Gif";
 
-const giphyApiKey = process.env.GIPHY_API_KEY;
+const giphyApiKey = process.env.GIPHY_API;
 
-const randomChoice = (arr: []) => {
+export interface GifLink {
+  images: {
+    original: {
+      mp4: string;
+    };
+  };
+}
+
+const randomChoice = (arr: []): GifLink => {
   const randIndex = Math.floor(Math.random() * arr.length);
   return arr[randIndex];
 };
 
 const Home: NextPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [gifs, setGifs] = useState([]);
+  const [gifs, setGifs] = useState<string[]>([]);
   const [hintText, setHintText] = useState<string>("");
   const [hasResults, setHasResults] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [validSearchPhrase, setValidSearchPhrase] = useState(false);
-
-  let inputRef = useRef(null);
 
   const giphySearch = async (searchTerm: string) => {
     setLoading(true);
@@ -34,14 +40,11 @@ const Home: NextPage = () => {
       );
 
       const { data } = await response.json();
-      console.log(data);
 
       if (!data.length) {
         throw `Nothing found for ${searchTerm}`;
       }
-      const randomGif = randomChoice(data);
-      console.log(data);
-      console.log(randomGif);
+      const randomGif = randomChoice(data)?.images.original.mp4;
 
       setGifs([...gifs, randomGif]);
       setHintText(`Hit enter to see more ${searchTerm}`);
@@ -61,7 +64,7 @@ const Home: NextPage = () => {
       setHintText(`Hit enter to search ${value}`);
       setValidSearchPhrase(true);
     } else {
-      setHintText(null);
+      setHintText("");
       setValidSearchPhrase(false);
     }
   };
@@ -75,6 +78,7 @@ const Home: NextPage = () => {
   function clearSearch() {
     setSearchTerm("");
     setHintText("");
+    setHasResults(false);
     setGifs([]);
   }
 
@@ -82,10 +86,10 @@ const Home: NextPage = () => {
     <main className="page">
       <Header clearSearch={clearSearch} hasResults={hasResults} />
       <div className="search grid">
-        {gifs.map((gif) => (
-          // eslint-disable-next-line react/jsx-key
-          <Gif images={[...gifs]} />
-        ))}
+        {gifs.map((gif, i) => {
+          return <Gif key={i} src={gif} />;
+        })}
+
         <input
           className="input grid-item"
           type="text"
@@ -93,7 +97,6 @@ const Home: NextPage = () => {
           onKeyPress={handleKeyPress}
           value={searchTerm}
           onChange={handleChange}
-          ref={(input) => (inputRef = input)}
           aria-label="Search for Gifs"
         />
         <button aria-label="Submit search term">Search</button>
