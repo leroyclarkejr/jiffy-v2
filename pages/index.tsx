@@ -61,7 +61,7 @@ const Home: NextPage = () => {
     setSearchTerm(value);
 
     if (value.length > 2) {
-      setHintText(`Hit enter to search ${value}`);
+      setHintText(`Hit enter to search for "${value}"`);
       setValidSearchPhrase(true);
     } else {
       setHintText("");
@@ -82,12 +82,16 @@ const Home: NextPage = () => {
     setGifs([]);
   }
 
+  const handleClick = () => {
+    giphySearch(searchTerm);
+  };
+
   return (
     <main className="page">
       <Header clearSearch={clearSearch} hasResults={hasResults} />
       <div className="search grid">
         {gifs.map((gif, i) => {
-          return <Gif key={i} src={gif} />;
+          return <Gif key={i} src={gif} onClick={handleClick} />;
         })}
 
         <input

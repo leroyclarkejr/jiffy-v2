@@ -1,5 +1,4 @@
 import Image from "next/image";
-import react from "react";
 import loaderIcon from "../public/images/loader.svg";
 
 export interface UserHintProps {
