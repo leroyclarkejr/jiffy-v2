@@ -8,6 +8,8 @@ import Header from "../components/Header";
 import { UserHint } from "../components/UserHint";
 import { Gif } from "../components/Gif";
 
+const giphyApiKey = process.env.GIPHY_API_KEY;
+
 const randomChoice = (arr: []) => {
   const randIndex = Math.floor(Math.random() * arr.length);
   return arr[randIndex];
@@ -28,7 +30,7 @@ const Home: NextPage = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://api.giphy.com/v1/gifs/search?api_key=v6NhNfqg3o1nQCcXRUBfBDfrxMcl9mv7&q=${searchTerm}&limit=25&offset=0&rating=G&lang=en`
+        `https://api.giphy.com/v1/gifs/search?api_key=${giphyApiKey}=${searchTerm}&limit=25&offset=0&rating=G&lang=en`
       );
 
       const { data } = await response.json();
