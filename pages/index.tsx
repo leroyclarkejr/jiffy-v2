@@ -47,7 +47,7 @@ const Home: NextPage = () => {
       const randomGif = randomChoice(data)?.images.original.mp4;
 
       setGifs([...gifs, randomGif]);
-      setHintText(`Hit enter to see more ${searchTerm}`);
+      setHintText(`Tap image to see more "${searchTerm}"`);
       setHasResults(true);
       setLoading(false);
     } catch (error) {
@@ -61,7 +61,7 @@ const Home: NextPage = () => {
     setSearchTerm(value);
 
     if (value.length > 2) {
-      setHintText(`Hit enter to search for "${value}"`);
+      // setHintText(`Hit enter to search for "${value}"`);
       setValidSearchPhrase(true);
     } else {
       setHintText("");
@@ -79,6 +79,7 @@ const Home: NextPage = () => {
     setSearchTerm("");
     setHintText("");
     setHasResults(false);
+    setValidSearchPhrase(false);
     setGifs([]);
   }
 
@@ -88,7 +89,12 @@ const Home: NextPage = () => {
 
   return (
     <main className="page">
-      <Header clearSearch={clearSearch} hasResults={hasResults} />
+      <Header
+        clearSearch={clearSearch}
+        handleSearch={handleClick}
+        hasResults={hasResults}
+        validSearchPhrase={validSearchPhrase}
+      />
       <div className="search grid">
         {gifs.map((gif, i) => {
           return <Gif key={i} src={gif} onClick={handleClick} />;
@@ -103,7 +109,6 @@ const Home: NextPage = () => {
           onChange={handleChange}
           aria-label="Search for Gifs"
         />
-        <button aria-label="Submit search term">Search</button>
       </div>
 
       <UserHint loading={loading} hintText={hintText} />

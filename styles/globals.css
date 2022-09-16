@@ -34,10 +34,17 @@ button {
   padding: 5vh 2rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .header {
   line-height: 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-top: 24px;
 }
 
 /* utils */
@@ -54,7 +61,7 @@ button {
 }
 
 .search {
-  margin: auto;
+  margin: 24px auto;
 }
 
 .title {
@@ -86,6 +93,10 @@ button {
 }
 
 .user-hint {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   text-align: center;
   font-size: 24px;
   line-height: 38px;
